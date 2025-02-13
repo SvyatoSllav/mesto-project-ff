@@ -14,7 +14,7 @@ function openModal(modalNode) {
 }
 
 function closeModalOnOverlayClick(event) {
-    if (!event.target.closest('.popup') || event.target.closest('button[type=submit]')) {
+    if (!event.target.closest('.popup')) {
         closeModal(closeModalOnOverlayClick.currentOpenedMoadl);
     }
 }

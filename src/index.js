@@ -1,21 +1,65 @@
 import './pages/index.css';
 import {initialCards, templateCardSelectors} from './components/consts.js'
-import {addCardsToPage} from './components/card.js'
+import {getCardNode} from './components/card.js'
 import {openModal, closeModal} from './components/modal.js'
-import {newPlaceFormSubmitHandler} from './components/newPlaceForm.js'
-import './components/editProfileForm'
 
 // Логика карточек
 const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
-addCardsToPage(initialCards, cardTemplate, cardList, templateCardSelectors);
+const imageModal = document.querySelector('.popup_type_image');
+
+function addCardsToPage(cardsData, cardTemplate, cardList, templateCardSelectors, imageModal, openModalHandler, closeModalHandler) {
+    cardsData.map((card) => {
+        cardList.appendChild(
+            getCardNode(
+                card,
+                cardTemplate,
+                cardList,
+                templateCardSelectors,
+                imageModal,
+                openModalHandler,
+                closeModalHandler
+            )
+        )
+    })
+}
+
+addCardsToPage(initialCards, cardTemplate, cardList, templateCardSelectors, imageModal, openModal, closeModal);
+
 
 // Логика модалки редактирования профиля
 const editProfileModal = document.querySelector('.popup_type_edit');
 const editProfileButton = document.querySelector('.profile__edit-button');
 const closeEditProfileButton = editProfileModal.querySelector('.popup__close');
-editProfileButton.addEventListener('click', () => openModal(editProfileModal));
+
+// Находим форму в DOM
+const formElement = document.forms['edit-profile']
+// Находим поля формы в DOM
+const nameInput = formElement.elements.name
+const jobInput = formElement.elements.description
+const profileName = document.querySelector('.profile__title')
+const profileDescription = document.querySelector('.profile__description')
+
+function handleProfileFormSubmit(event) {
+    event.preventDefault();
+    profileName.textContent = nameInput.value;
+    profileDescription.textContent = jobInput.value;
+    closeModal(editProfileModal)
+}
+
+// Прикрепляем обработчик к форме:
+// он будет следить за событием “submit” - «отправка»
+formElement.addEventListener('submit', handleProfileFormSubmit);
+editProfileButton.addEventListener('click', () => {
+    nameInput.value = profileName.textContent;
+    jobInput.value = profileDescription.textContent;
+    openModal(editProfileModal)
+});
 closeEditProfileButton.addEventListener('click', () => closeModal(editProfileModal));
+
+
+// Логика сохранения нового места
+const newPlaceForm = document.forms['new-place']
 
 // Логика модалки добавления места
 const newPlaceModal = document.querySelector('.popup_type_new-card');
@@ -24,9 +68,17 @@ const closeNewPlaceModalButton = newPlaceModal.querySelector('.popup__close');
 newPlaceModalButton.addEventListener('click', () => openModal(newPlaceModal));
 closeNewPlaceModalButton.addEventListener('click', () => closeModal(newPlaceModal));
 
-// Логика сохранения нового места
-const newPlaceForm = document.forms['new-place']
+function newPlaceFormSubmitHandler(event, newPlaceForm) {
+    event.preventDefault();
+    const newCard = {};
+    newCard.name = newPlaceForm.elements['place-name'].value;
+    newCard.link = newPlaceForm.elements.link.value;
+    const cardNode = getCardNode(newCard, cardTemplate, cardList, templateCardSelectors, imageModal, openModal, closeModal);
+    cardList.prepend(cardNode);
+    closeModal(newPlaceModal)
+    newPlaceForm.reset();
+}
+
 newPlaceForm.addEventListener('submit', (event) => {
     newPlaceFormSubmitHandler(event, newPlaceForm)
-    addCardsToPage(initialCards, cardTemplate, cardList, templateCardSelectors);
 })
