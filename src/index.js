@@ -9,7 +9,7 @@ const cardList = document.querySelector('.places__list');
 const imageModal = document.querySelector('.popup_type_image');
 imageModal.querySelector('.popup__close').addEventListener('click', () => closeModal(imageModal));
 
-function addCardsToPage(cardsData, cardTemplate, templateCardSelectors, imageModal, openModalHandler, closeModalHandler) {
+function addCardsToPage(cardsData, cardTemplate, templateCardSelectors) {
     cardsData.map((card) => {
         cardList.appendChild(
             getCardNode(
