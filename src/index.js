@@ -9,17 +9,14 @@ const cardList = document.querySelector('.places__list');
 const imageModal = document.querySelector('.popup_type_image');
 imageModal.querySelector('.popup__close').addEventListener('click', () => closeModal(imageModal));
 
-function addCardsToPage(cardsData, cardTemplate, cardList, templateCardSelectors, imageModal, openModalHandler, closeModalHandler) {
+function addCardsToPage(cardsData, cardTemplate, templateCardSelectors, imageModal, openModalHandler, closeModalHandler) {
     cardsData.map((card) => {
         cardList.appendChild(
             getCardNode(
                 card,
                 cardTemplate,
-                cardList,
                 templateCardSelectors,
-                imageModal,
-                openModalHandler,
-                closeModalHandler
+                openImageModal,
             )
         )
     })
@@ -31,7 +28,7 @@ function openImageModal(cardLink, cardName) {
     openModal(imageModal);
 }
 
-addCardsToPage(initialCards, cardTemplate, cardList, templateCardSelectors, openImageModal);
+addCardsToPage(initialCards, cardTemplate, templateCardSelectors);
 
 
 // Логика модалки редактирования профиля
@@ -80,7 +77,7 @@ function newPlaceFormSubmitHandler(event, newPlaceForm) {
     const newCard = {};
     newCard.name = newPlaceForm.elements['place-name'].value;
     newCard.link = newPlaceForm.elements.link.value;
-    const cardNode = getCardNode(newCard, cardTemplate, cardList, templateCardSelectors, imageModal, openModal, closeModal);
+    const cardNode = getCardNode(newCard, cardTemplate, templateCardSelectors, openImageModal);
     cardList.prepend(cardNode);
     closeModal(newPlaceModal)
     newPlaceForm.reset();

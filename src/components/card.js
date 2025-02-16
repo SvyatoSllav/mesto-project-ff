@@ -1,8 +1,9 @@
-function getCardNode(card, cardTemplate, cardList, templateCardSelectors, openImageModalHandler) {
+function getCardNode(card, cardTemplate, templateCardSelectors, openImageModalHandler) {
     const cardElement = cardTemplate.cloneNode(true);
+    const imageNode = cardElement.querySelector(templateCardSelectors.image);
     cardElement.querySelector(templateCardSelectors.title).textContent = card.name;
-    cardElement.querySelector(templateCardSelectors.image).src = card.link;
-    cardElement.querySelector(templateCardSelectors.image).addEventListener('click', () => openImageModalHandler(
+    imageNode.src = card.link;
+    imageNode.addEventListener('click', () => openImageModalHandler(
         card.link,
         card.name
     ));
