@@ -7,6 +7,7 @@ import {openModal, closeModal} from './components/modal.js'
 const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
 const imageModal = document.querySelector('.popup_type_image');
+imageModal.querySelector('.popup__close').addEventListener('click', () => closeModal(imageModal));
 
 function addCardsToPage(cardsData, cardTemplate, cardList, templateCardSelectors, imageModal, openModalHandler, closeModalHandler) {
     cardsData.map((card) => {
@@ -24,7 +25,13 @@ function addCardsToPage(cardsData, cardTemplate, cardList, templateCardSelectors
     })
 }
 
-addCardsToPage(initialCards, cardTemplate, cardList, templateCardSelectors, imageModal, openModal, closeModal);
+function openImageModal(cardLink, cardName) {
+    imageModal.querySelector('.popup__image').src = cardLink;
+    imageModal.querySelector('.popup__caption').textContent = cardName;
+    openModal(imageModal);
+}
+
+addCardsToPage(initialCards, cardTemplate, cardList, templateCardSelectors, openImageModal);
 
 
 // Логика модалки редактирования профиля
