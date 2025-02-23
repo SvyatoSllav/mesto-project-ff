@@ -86,3 +86,26 @@ function newPlaceFormSubmitHandler(event, newPlaceForm) {
 newPlaceForm.addEventListener('submit', (event) => {
     newPlaceFormSubmitHandler(event, newPlaceForm)
 })
+
+
+// Логика валидации форм.
+const showError = (formError, errorMessage) => {
+    formError.textContent = errorMessage
+    formError.style.display = 'inline-block'
+};
+//
+const hideError = (formError) => {
+    formError.textContent = ''
+    formError.style.display = 'none'
+};
+
+const checkInputValidity = (formInput) => {
+    const formError = formElement.querySelector(`.${formInput.id}Error`);
+    if (!formInput.validity.valid) {
+        showError(formError, formInput.validationMessage);
+    } else {
+        hideError(formError);
+    }
+};
+formElement.elements.name.addEventListener('input', () => checkInputValidity(formElement.elements.name))
+formElement.elements.description.addEventListener('input', () => checkInputValidity(formElement.elements.description))
