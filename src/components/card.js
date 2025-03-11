@@ -1,22 +1,56 @@
-function getCardNode(card, cardTemplate, templateCardSelectors, openImageModalHandler) {
+import {deleteCardApi, setLikeApi} from "./api";
+
+function getCardNode(card, cardTemplate, templateCardSelectors, openImageModalHandler, userId) {
     const cardElement = cardTemplate.cloneNode(true);
     const imageNode = cardElement.querySelector(templateCardSelectors.image);
+    const deleteButton = cardElement.querySelector(templateCardSelectors.deleteButton);
+    const likesCounterNode = cardElement.querySelector(templateCardSelectors.likeCounter);
     cardElement.querySelector(templateCardSelectors.title).textContent = card.name;
     imageNode.src = card.link;
+    likesCounterNode.textContent = card.likes.length;
     imageNode.addEventListener('click', () => openImageModalHandler(
         card.link,
         card.name
     ));
-    cardElement.querySelector(templateCardSelectors.deleteButton).addEventListener('click', removeCard);
-    cardElement.querySelector(templateCardSelectors.likeButton).addEventListener('click', event => likeCard(event));
+
+    const likeButton = cardElement.querySelector(templateCardSelectors.likeButton)
+    likeButton.addEventListener('click', () => {
+        setLikeToCard(likeButton, card._id, likesCounterNode)
+    })
+
+    const userHasLiked = card.likes.some(like => like._id === userId)
+    if (userHasLiked) {
+        likeButton.classList.add('card__like-button_is-active')
+    }
+
+    if (card.owner._id !== userId) {
+        deleteButton.remove()
+    } else {
+        deleteButton.addEventListener('click', () => {
+            deleteButton.addEventListener('click', () => removeCard(event, card._id));
+        })
+    }
     return cardElement;
 }
 
-function likeCard(event) {
-    event.target.classList.toggle('card__like-button_is-active');
+export function setLikeToCard(likeButton, cardId, likesCountNode) {
+    const isLiked = likeButton.classList.contains('card__like-button_is-active')
+
+    setLikeApi(cardId, isLiked)
+        .then(updatedCard => {
+            likeButton.classList.toggle('card__like-button_is-active')
+            likesCountNode.textContent = updatedCard.likes.length
+        })
+        .catch(err => console.log(err))
 }
 
-function removeCard(event) {
-    event.target.closest('.card').remove();
+function removeCard(event, cardId) {
+    deleteCardApi(cardId)
+        .then(() => {
+            event.target.closest('.card').remove();
+        })
+        .catch(err => {
+            console.log(`Ошибка при удалении карточки: ${err}`)
+        })
 }
 export {getCardNode}

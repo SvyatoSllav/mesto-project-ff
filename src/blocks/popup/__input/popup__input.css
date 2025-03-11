@@ -20,11 +20,15 @@
   color: #FF0000;
 }
 
-.popup__input:invalid {
+.popup__error_visible {
+  display: block;
+}
+
+.popup__input_type_error {
   border-bottom-color: #FF0000;
 }
 
-.popup__form:invalid button[type=submit] {
+.popup__button_disabled {
   opacity: 0.2;
   background-color: #fff;
   color: #000;
