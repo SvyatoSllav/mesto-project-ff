@@ -13,6 +13,15 @@ const profileAvatar = document.querySelector('.profile__image')
 const cardTemplate = document.querySelector('#card-template').content;
 const cardList = document.querySelector('.places__list');
 const imageModal = document.querySelector('.popup_type_image');
+const imageModalImageNode = imageModal.querySelector('.popup__image');
+const imageModalCaptionNode = imageModal.querySelector('.popup__caption');
+
+// Добавляем класс для попапов для плавной анимации
+const popupList = document.querySelectorAll(".popup");
+popupList.forEach(function (popup) {
+    popup.classList.add("popup_is-animated");
+});
+
 Promise.all([getUserDataApi(), getInitialCardsApi()])
     .then(([userData, initialCards]) => {
         currentUserId = userData._id
@@ -42,8 +51,9 @@ function addCardsToPage(cardsData, cardTemplate, templateCardSelectors) {
 }
 
 function openImageModal(cardLink, cardName) {
-    imageModal.querySelector('.popup__image').src = cardLink;
-    imageModal.querySelector('.popup__caption').textContent = cardName;
+    imageModalImageNode.src = cardLink;
+    imageModalImageNode.alt = cardName;
+    imageModalCaptionNode.textContent = cardName;
     openModal(imageModal);
 }
 
@@ -58,8 +68,6 @@ const editProfileFormNode = document.forms['edit-profile']
 // Находим поля формы в DOM
 const nameInput = editProfileFormNode.elements.name
 const descriptionInput = editProfileFormNode.elements.description
-nameInput.value = profileName.textContent;
-descriptionInput.value = profileDescription.textContent;
 
 function handleProfileFormSubmit(event) {
     event.preventDefault();
@@ -81,7 +89,6 @@ function handleProfileFormSubmit(event) {
 // он будет следить за событием “submit” - «отправка»
 editProfileFormNode.addEventListener('submit', handleProfileFormSubmit);
 editProfileButton.addEventListener('click', () => {
-    editProfileFormNode.reset();
     nameInput.value = profileName.textContent;
     descriptionInput.value = profileDescription.textContent;
     clearValidation(editProfileFormNode, validationConfig)

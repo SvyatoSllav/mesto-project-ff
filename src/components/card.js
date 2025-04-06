@@ -1,12 +1,13 @@
 import {deleteCardApi, setLikeApi} from "./api";
 
 function getCardNode(card, cardTemplate, templateCardSelectors, openImageModalHandler, userId) {
-    const cardElement = cardTemplate.cloneNode(true);
+    const cardElement= cardTemplate.querySelector(".card").cloneNode(true);
     const imageNode = cardElement.querySelector(templateCardSelectors.image);
     const deleteButton = cardElement.querySelector(templateCardSelectors.deleteButton);
     const likesCounterNode = cardElement.querySelector(templateCardSelectors.likeCounter);
     cardElement.querySelector(templateCardSelectors.title).textContent = card.name;
     imageNode.src = card.link;
+    imageNode.alt = card.name;
     likesCounterNode.textContent = card.likes.length;
     imageNode.addEventListener('click', () => openImageModalHandler(
         card.link,
@@ -26,9 +27,7 @@ function getCardNode(card, cardTemplate, templateCardSelectors, openImageModalHa
     if (card.owner._id !== userId) {
         deleteButton.remove()
     } else {
-        deleteButton.addEventListener('click', () => {
-            deleteButton.addEventListener('click', () => removeCard(event, card._id));
-        })
+        deleteButton.addEventListener('click', () => {removeCard(card)})
     }
     return cardElement;
 }
@@ -44,10 +43,10 @@ export function setLikeToCard(likeButton, cardId, likesCountNode) {
         .catch(err => console.log(err))
 }
 
-function removeCard(event, cardId) {
-    deleteCardApi(cardId)
+function removeCard(card) {
+    deleteCardApi(card._id)
         .then(() => {
-            event.target.closest('.card').remove();
+            card.remove();
         })
         .catch(err => {
             console.log(`Ошибка при удалении карточки: ${err}`)
