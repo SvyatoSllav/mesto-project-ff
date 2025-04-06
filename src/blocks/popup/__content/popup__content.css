@@ -1,7 +1,10 @@
 .popup__content {
   max-width: 430px;
   width: 100%;
-  min-height: 330px;
+  /* Увеличил минимальную высоту, чтобы форма не менялась в размерах.
+  Так как при отображении ошибок форма неизбежно будет увеличиваться в связи с необходимостью нового места
+  */
+  min-height: 370px;
   background-color: #fff;
   border-radius: 10px;
   position: relative;
