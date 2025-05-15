@@ -123,7 +123,6 @@ function newPlaceFormSubmitHandler(event, newPlaceForm) {
         .then(card => {
             const cardNode = getCardNode(card, cardTemplate, templateCardSelectors, openImageModal, currentUserId);
             cardList.prepend(cardNode);
-            newPlaceForm.reset();
             closeModal(newPlaceModal)
         })
         .catch(err => console.error(err))

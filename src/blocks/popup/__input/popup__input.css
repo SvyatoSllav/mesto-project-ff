@@ -21,7 +21,7 @@
 }
 
 .popup__error_visible {
-  display: block;
+  display: inline-block;
 }
 
 .popup__input_type_error {

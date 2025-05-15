@@ -1,7 +1,6 @@
 const showError = (formErrorNode, errorMessage, errorClass) => {
     formErrorNode.textContent = errorMessage
     formErrorNode.classList.add(errorClass)
-    formErrorNode.style.display = 'inline-block'
 };
 
 const hideError = (formErrorNode, errorClass) => {
@@ -60,12 +59,12 @@ function clearValidation(form, validationConfig) {
     inputElements.forEach((input) => {
         const formErrorNode = form.querySelector(`.${input.id}Error`);
         hideError(formErrorNode);
-        if (!hasInvalidInput(form, validationConfig.inputSelector)) {
-            enableSubmitButton(formSubmitButton, validationConfig.inactiveButtonClass);
-        } else {
-            disableSubmitButton(formSubmitButton, validationConfig.inactiveButtonClass);
-        }
     })
+    if (!hasInvalidInput(form, validationConfig.inputSelector)) {
+        enableSubmitButton(formSubmitButton, validationConfig.inactiveButtonClass);
+    } else {
+        disableSubmitButton(formSubmitButton, validationConfig.inactiveButtonClass);
+    }
 }
 
 export {enableValidation, clearValidation}

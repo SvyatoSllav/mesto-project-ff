@@ -27,7 +27,7 @@ function getCardNode(card, cardTemplate, templateCardSelectors, openImageModalHa
     if (card.owner._id !== userId) {
         deleteButton.remove()
     } else {
-        deleteButton.addEventListener('click', () => {removeCard(card)})
+        deleteButton.addEventListener('click', (event) => {removeCard(event, card)})
     }
     return cardElement;
 }
@@ -43,10 +43,11 @@ export function setLikeToCard(likeButton, cardId, likesCountNode) {
         .catch(err => console.log(err))
 }
 
-function removeCard(card) {
+function removeCard(event, card) {
+    const cardNode = event.target.closest(".places__item");
     deleteCardApi(card._id)
         .then(() => {
-            card.remove();
+            cardNode.remove();
         })
         .catch(err => {
             console.log(`Ошибка при удалении карточки: ${err}`)
