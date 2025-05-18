@@ -33,10 +33,12 @@ const hasInvalidInput = (form, inputSelector) => {
 
 const disableSubmitButton = (buttonToDisable, disabledClass) => {
     buttonToDisable.classList.add(disabledClass);
+    buttonToDisable.disabled = true;
 }
 
 const enableSubmitButton = (buttonToDisable, disabledClass) => {
     buttonToDisable.classList.remove(disabledClass);
+    buttonToDisable.disabled = false;
 }
 
 const enableValidation = (validationConfig) => {
